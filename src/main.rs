@@ -16,7 +16,6 @@ fn main() -> Result<(),Box<dyn std::error::Error>>{
 
     // return indices in "snail sort", for example,
     // (3,3) will get [(0,0),(0,1),(0,2),(1,2),(2,2),(2,1),(2,0),(1,0),(1,1)]
-    // this assumes the case in `image`, as it's [`Pixels`](https://docs.rs/image/0.23.14/image/struct.Pixels.html) returns pixels row by row.
     let mut snail_sort = |(height_, width_): (u32, u32)| {
         fn is_odd(num: u32) -> u32 {
             2 - (num & 1)
