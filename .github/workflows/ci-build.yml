@@ -18,32 +18,32 @@ jobs:
           - platform: macos-x86_64
             target: x86_64-apple-darwin
             os: macos-latest
-            bin: snail-image-confuse
+            bin: snail_image_confuse
 
           - platform: linux_glibc-x86_64
             target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            bin: snail-image-confuse
+            bin: snail_image_confuse
             
           - platform: linux_musl-x86_64
             target: x86_64-unknown-linux-musl
             os: ubuntu-latest
-            bin: snail-image-confuse
+            bin: snail_image_confuse
         
           - platform: linux_musl-i686
             target: i686-unknown-linux-musl
             os: ubuntu-latest
-            bin: snail-image-confuse
+            bin: snail_image_confuse
             
           - platform: windows-i686
             target: i686-pc-windows-msvc
             os: windows-latest
-            bin: snail-image-confuse.exe
+            bin: snail_image_confuse.exe
             
           - platform: windows-x86_64
             target: x86_64-pc-windows-msvc
             os: windows-latest
-            bin: snail-image-confuse.exe
+            bin: snail_image_confuse.exe
             
     steps:
       - name: Install toolchain
