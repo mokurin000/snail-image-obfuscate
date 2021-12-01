@@ -72,10 +72,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 for (h, w) in (0..height).map(move |i| (off + i, off)).rev() {
                     yield (h, w);
                 }
+                continue
             } else if height == 1 {
                 for (h, w) in (0..width).map(move |i| (off, off + i)).rev() {
                     yield (h, w);
                 }
+                continue
             }
 
             for (h, w) in (1..height).map(move |i| (i + off, off)) {
