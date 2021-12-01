@@ -58,15 +58,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut snail_sort_rev = |(height_, width_): (u32, u32)| {
-        fn is_odd(num: u32) -> u32 {
-            2 - (num & 1)
+        fn offset(num1: u32,num2: u32) -> u32 {
+            (num1.min(num2)-1)/2
         }
 
-        let minimum = std::cmp::min(width_, height_);
-        for ((width, height), off) in (is_odd(width_)..=width_)
+        let offset = std::cmp::min(width_, height_);
+        for ((width, height), off) in (width_-offset*2..=width_)
             .step_by(2)
-            .zip((is_odd(height_)..=height_).step_by(2))
-            .zip((0u32..=(minimum - 1) / 2).rev())
+            .zip((height_-offset*2..=height_).step_by(2))
+            .zip((0..=offset).rev())
         {
             if width == 1 {
                 for (h, w) in (0..height).map(move |i| (off + i, off)).rev() {
