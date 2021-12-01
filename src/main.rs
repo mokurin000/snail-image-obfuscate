@@ -58,11 +58,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut snail_sort_rev = |(height_, width_): (u32, u32)| {
-        fn offset(num1: u32,num2: u32) -> u32 {
+        fn offset_end(num1: u32,num2: u32) -> u32 {
             (num1.min(num2)-1)/2
         }
 
-        let offset = std::cmp::min(width_, height_);
+        let offset = offset_end(width_, height_);
         for ((width, height), off) in (width_-offset*2..=width_)
             .step_by(2)
             .zip((height_-offset*2..=height_).step_by(2))
