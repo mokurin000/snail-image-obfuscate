@@ -66,7 +66,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         for ((width, height), off) in (is_odd(width_)..=width_)
             .step_by(2)
             .zip((is_odd(height_)..=height_).step_by(2))
-            .zip((0u32..=(minimum - 1 + (minimum & 1)) / 2).rev())
+            .zip((0u32..=(minimum - 1) / 2).rev())
         {
             if width == 1 {
                 for (h, w) in (0..height).map(move |i| (off + i, off)).rev() {
@@ -87,7 +87,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             for (h, w) in (0..height - 1)
-                .map(move |i| (off + i as u32, off + width - 1))
+                .map(move |i| (off + i, off + width - 1))
                 .rev()
             {
                 yield (h, w);
