@@ -142,8 +142,8 @@ fn main() {
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    #[clap(long, value_hint = ValueHint::AnyPath)]
+    #[clap(long, value_hint = ValueHint::FilePath)]
     input_file: PathBuf,
-    #[clap(long, value_hint = ValueHint::AnyPath)]
+    #[clap(long, value_hint = ValueHint::FilePath)]
     output_file: PathBuf,
 }
