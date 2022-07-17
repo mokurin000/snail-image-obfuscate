@@ -1,18 +1,20 @@
 #![feature(generators, generator_trait)]
-#![allow(unused_variables)]
 
 use std::ops::{Generator, GeneratorState};
+use std::path::PathBuf;
 use std::pin::Pin;
 
 extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
-use clap::{App, Arg};
 use image::ImageFormat;
 
+use clap::Parser;
+use clap::ValueHint;
 use image::io::Reader;
+use klask::Settings;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     pretty_env_logger::init();
 
     // return indices in "snail sort", for example,
@@ -100,54 +102,48 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    let matches = App::new("Snail Image Confuse")
-        .author("poly000 <1348292515@qq.com>")
-        .about("Simple image confuse tool")
-        .arg(
-            Arg::with_name("INPUT")
-                .help("Sets the input file to use")
-                .required(true)
-                .index(1),
-        )
-        .arg(
-            Arg::with_name("OUTPUT")
-                .help("Sets the output file to write (*.png)")
-                .required(true)
-                .index(2),
-        )
-        .get_matches();
+    let settings = Settings {
+        enable_env: Some("please set RUST_LOG as error, warn, info, debug or trace".into()),
+        ..Settings::default()
+    };
 
-    let input = matches.value_of("INPUT").unwrap();
-    let output = matches.value_of("OUTPUT").unwrap();
+    klask::run_derived(settings, |matches: Args| {
+        let Args {input_file, output_file } = matches;
 
-    info!("INPUT: {}", input);
-    info!("OUTPUT: {}", output);
+        let input_img = Reader::open(input_file).unwrap().decode().unwrap();
 
-    let input_img = Reader::open(input)?.decode()?;
-    let writer = std::io::BufWriter::new(std::fs::File::create(output)?);
+        let height = input_img.height();
+        let width = input_img.width();
+        info!("height & width: {}, {}", height, width);
 
-    let height = input_img.height();
-    let width = input_img.width();
-    info!("height & width: {}, {}", height, width);
-
-    let pixels = height * width / 2;
-    debug!("pixels: {}", pixels);
-    info!("start converting input image to RGBA16");
-    let mut mut_img = input_img.to_rgba16();
-    for _ in 0..pixels {
-        if let GeneratorState::Yielded((hy, hx)) = Pin::new(&mut snail_sort).resume((height, width))
-        {
-            if let GeneratorState::Yielded((ty, tx)) =
-                Pin::new(&mut snail_sort_rev).resume((height, width))
+        let pixels = height * width / 2;
+        info!("pixels: {}", pixels);
+        info!("start converting input image to RGBA16");
+        let mut mut_img = input_img.to_rgba16();
+        for _ in 0..pixels {
+            if let GeneratorState::Yielded((hy, hx)) =
+                Pin::new(&mut snail_sort).resume((height, width))
             {
-                let p = *mut_img.get_pixel(hx, hy);
-                *mut_img.get_pixel_mut(hx, hy) = *mut_img.get_pixel(tx, ty);
-                *mut_img.get_pixel_mut(tx, ty) = p;
+                if let GeneratorState::Yielded((ty, tx)) =
+                    Pin::new(&mut snail_sort_rev).resume((height, width))
+                {
+                    let p = *mut_img.get_pixel(hx, hy);
+                    *mut_img.get_pixel_mut(hx, hy) = *mut_img.get_pixel(tx, ty);
+                    *mut_img.get_pixel_mut(tx, ty) = p;
+                }
             }
         }
-    }
 
-    info!("start writing to {}", output);
-    mut_img.save_with_format(output, ImageFormat::Png)?;
-    Ok(())
+        info!("start writing to {}", output_file.display());
+        mut_img.save_with_format(output_file, ImageFormat::Png).unwrap();
+    });
+}
+
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(long, value_hint = ValueHint::AnyPath)]
+    input_file: PathBuf,
+    #[clap(long, value_hint = ValueHint::AnyPath)]
+    output_file: PathBuf,
 }
