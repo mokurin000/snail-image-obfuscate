@@ -12,28 +12,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [macos-x86_64, linux_glibc-x86_64, linux_musl-x86_64, linux_musl-i686,  windows-i686, windows-x86_64]
+        platform: [windows-i686, windows-x86_64]
         include:
-        
-          - platform: macos-x86_64
-            target: x86_64-apple-darwin
-            os: macos-latest
-            bin: snail_image_confuse
-
-          - platform: linux_glibc-x86_64
-            target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            bin: snail_image_confuse
-            
-          - platform: linux_musl-x86_64
-            target: x86_64-unknown-linux-musl
-            os: ubuntu-latest
-            bin: snail_image_confuse
-        
-          - platform: linux_musl-i686
-            target: i686-unknown-linux-musl
-            os: ubuntu-latest
-            bin: snail_image_confuse
             
           - platform: windows-i686
             target: i686-pc-windows-msvc
@@ -67,10 +47,7 @@ jobs:
         shell: bash
         run: |
           mv target/${{ matrix.target }}/release/${{ matrix.bin }} .
-          if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
-          then strip ${{ matrix.bin }}
-          fi
-          
+          strip ${{ matrix.bin }}
           tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }}
           
       - name: Declare some variables # https://stackoverflow.com/a/61699863
