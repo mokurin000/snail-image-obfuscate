@@ -8,7 +8,7 @@ extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
 use clap::{App, Arg};
-use image::{GenericImageView, ImageFormat};
+use image::ImageFormat;
 
 use image::io::Reader;
 
@@ -58,26 +58,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut snail_sort_rev = |(height_, width_): (u32, u32)| {
-        fn offset_end(num1: u32,num2: u32) -> u32 {
-            (num1.min(num2)-1)/2
+        fn offset_end(num1: u32, num2: u32) -> u32 {
+            (num1.min(num2) - 1) / 2
         }
 
         let offset = offset_end(width_, height_);
-        for ((width, height), off) in (width_-offset*2..=width_)
+        for ((width, height), off) in (width_ - offset * 2..=width_)
             .step_by(2)
-            .zip((height_-offset*2..=height_).step_by(2))
+            .zip((height_ - offset * 2..=height_).step_by(2))
             .zip((0..=offset).rev())
         {
             if width == 1 {
                 for (h, w) in (0..height).map(move |i| (off + i, off)).rev() {
                     yield (h, w);
                 }
-                continue
+                continue;
             } else if height == 1 {
                 for (h, w) in (0..width).map(move |i| (off, off + i)).rev() {
                     yield (h, w);
                 }
-                continue
+                continue;
             }
 
             for (h, w) in (1..height).map(move |i| (i + off, off)) {
@@ -101,8 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let matches = App::new("Snail Image Confuse")
-        .version("0.1.0")
-        .author("poly000 <pedajilao@vip.qq.com>")
+        .author("poly000 <1348292515@qq.com>")
         .about("Simple image confuse tool")
         .arg(
             Arg::with_name("INPUT")
