@@ -102,11 +102,11 @@ pub fn process(input: PathBuf, output: PathBuf) {
     let width = input_img.width();
     info!("height & width: {}, {}", height, width);
 
-    let pixels = height * width / 2;
+    let pixels = height * width;
     info!("pixels: {}", pixels);
     info!("start converting input image to RGBA16");
     let mut mut_img = input_img.to_rgba16();
-    for _ in 0..pixels {
+    for _ in 0..pixels/2 {
         if let GeneratorState::Yielded((hy, hx)) = Pin::new(&mut snail_sort).resume((height, width))
         {
             if let GeneratorState::Yielded((ty, tx)) =
