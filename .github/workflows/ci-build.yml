@@ -18,12 +18,12 @@ jobs:
           - platform: windows-i686
             target: i686-pc-windows-msvc
             os: windows-latest
-            bin: snail_image_confuse.exe
+            bin: snail_image_obfuscate.exe
             
           - platform: windows-x86_64
             target: x86_64-pc-windows-msvc
             os: windows-latest
-            bin: snail_image_confuse.exe
+            bin: snail_image_obfuscate.exe
             
     steps:
       - name: Install toolchain
