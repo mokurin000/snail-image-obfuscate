@@ -12,15 +12,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [windows-i686, windows-x86_64]
+        platform: [macos-x86_64, linux_glibc-x86_64, linux_musl-x86_64, windows-x86_64]
         include:
+        
+          - platform: macos-x86_64
+            target: x86_64-apple-darwin
+            os: macos-latest
+            bin: snail_image_obfuscate
+
+          - platform: linux_glibc-x86_64
+            target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            bin: snail_image_obfuscate
             
-          - platform: windows-i686
-            target: i686-pc-windows-msvc
-            os: windows-latest
-            bin: snail_image_obfuscate.exe
-            
-          - platform: windows-x86_64
+          - platform: linux_musl-x86_64
+            target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            bin: snail_image_obfuscate
+        
             target: x86_64-pc-windows-msvc
             os: windows-latest
             bin: snail_image_obfuscate.exe
@@ -36,6 +45,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
+      - name: configure environment
+        shell: bash
+        run: |
+          if [[ ${{ matrix.target }} == x86_64-unknown-linux-musl ]]
+          then apt install libxcb-shape0-dev
+          fi
+
       - name: Run code build
         uses: actions-rs/cargo@v1
         with:
@@ -47,7 +63,10 @@ jobs:
         shell: bash
         run: |
           mv target/${{ matrix.target }}/release/${{ matrix.bin }} .
-          strip ${{ matrix.bin }}
+          if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
+          then strip ${{ matrix.bin }}
+          fi
+          
           tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }}
           
       - name: Declare some variables # https://stackoverflow.com/a/61699863
