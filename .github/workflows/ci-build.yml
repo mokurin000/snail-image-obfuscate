@@ -46,7 +46,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: configure environment
+      - name: Configure environment
         shell: bash
         run: |
           if [[ ${{ matrix.target }} == x86_64-unknown-linux-musl ]] || [[ ${{ matrix.target }} == x86_64-unknown-linux-gnu ]]
