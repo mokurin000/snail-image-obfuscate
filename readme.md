@@ -19,4 +19,4 @@ After calling `./snail_image_confuse 87439165_p0.jpg 1.png`:
 
 This project is highly inspired by a codewars kata, [Snail](https://www.codewars.com/kata/521c2db8ddc89b9b7a0000c1).
 
-87439165_p0,jpg is a work of [御巫 ゆり](https://www.pixiv.net/users/47219840), which is not licensed under MIT.
+87439165_p0.jpg is a work of [御巫 ゆり](https://www.pixiv.net/users/47219840), which is not licensed under MIT.
