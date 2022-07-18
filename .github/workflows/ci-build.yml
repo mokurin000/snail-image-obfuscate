@@ -30,6 +30,7 @@ jobs:
             os: ubuntu-latest
             bin: snail_image_obfuscate
         
+          - platfrom: windows-x86_64
             target: x86_64-pc-windows-msvc
             os: windows-latest
             bin: snail_image_obfuscate.exe
