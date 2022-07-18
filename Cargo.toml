@@ -1,9 +1,9 @@
 [package]
-name = "snail_image_confuse"
+name = "snail_image_obfuscate"
 version = "1.0.0"
 edition = "2018"
 license = "MIT"
-description = "Simple image confuse tool"
+description = "Simple image obfuscate tool"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

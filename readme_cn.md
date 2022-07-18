@@ -1,6 +1,6 @@
-# Snail Image Confuse
+# Snail Image Obfuscate
 
-Snail Image Confuse 是个简易的图片混淆工具，
+Snail Image Obfuscate 是个简易的图片混淆工具，
 用于绕过图片审查，比如在即时聊天软件中。
 
 生成的结果可能有点奇怪，不过实用型可能不错？

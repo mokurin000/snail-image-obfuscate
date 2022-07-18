@@ -103,12 +103,13 @@ fn main() {
     };
 
     let settings = Settings {
+        enable_working_dir: Some("output image will be placed here".into()),
         enable_env: Some("please set RUST_LOG as error, warn, info, debug or trace".into()),
         ..Settings::default()
     };
 
     klask::run_derived(settings, |matches: Args| {
-        let Args {input_file, output_file } = matches;
+        let Args {input_file, filename: output_file } = matches;
 
         let input_img = Reader::open(input_file).unwrap().decode().unwrap();
 
@@ -142,8 +143,8 @@ fn main() {
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    #[clap(long, value_hint = ValueHint::FilePath)]
+    #[clap(help = "image to process, suffix must correct", long, value_hint = ValueHint::FilePath)]
     input_file: PathBuf,
-    #[clap(long, value_hint = ValueHint::FilePath)]
-    output_file: PathBuf,
+    #[clap(help = "output filename, should end with .png")]
+    filename: PathBuf,
 }

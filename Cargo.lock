@@ -1796,7 +1796,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "snail_image_confuse"
+name = "snail_image_obfuscate"
 version = "1.0.0"
 dependencies = [
  "clap",

@@ -1,8 +1,8 @@
-# Snail Image Confuse
+# Snail Image Obfuscate
 
 [简体中文](readme_cn.md)
 
-Snail Image Confuse is a simple tool of image confusing,
+Snail Image Obfuscate is a simple tool of image confusing,
 to bypass image censorship for example in IM.
 
 The result may seem strange, but it is practical.
