@@ -107,9 +107,10 @@ pub fn process(input: PathBuf, output: PathBuf) {
     info!("start converting input image to RGBA16");
     let mut mut_img = input_img.to_rgba16();
     for _ in 0..pixels/2 {
-        if let GeneratorState::Yielded((hy, hx)) = Pin::new(&mut snail_sort).resume((height, width))
+        use GeneratorState::Yielded;
+        if let Yielded((hy, hx)) = Pin::new(&mut snail_sort).resume((height, width))
         {
-            if let GeneratorState::Yielded((ty, tx)) =
+            if let Yielded((ty, tx)) =
                 Pin::new(&mut snail_sort_rev).resume((height, width))
             {
                 let p = *mut_img.get_pixel(hx, hy);
