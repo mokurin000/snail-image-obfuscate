@@ -12,28 +12,23 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        platform: [macos-x86_64, linux_glibc-x86_64, linux_musl-x86_64, windows-x86_64]
+        platform: [macos-x86_64, linux_glibc-x86_64, windows-x86_64]
         include:
         
           - platform: macos-x86_64
             target: x86_64-apple-darwin
             os: macos-latest
-            bin: snail_image_obfuscate
+            bin: daily_material
 
           - platform: linux_glibc-x86_64
             target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            bin: snail_image_obfuscate
+            bin: daily_material
             
-          - platform: linux_musl-x86_64
-            target: x86_64-unknown-linux-musl
-            os: ubuntu-latest
-            bin: snail_image_obfuscate
-        
-          - platfrom: windows-x86_64
+          - platform: windows-x86_64
             target: x86_64-pc-windows-msvc
             os: windows-latest
-            bin: snail_image_obfuscate.exe
+            bin: daily_material.exe
             
     steps:
       - name: Install toolchain
@@ -45,11 +40,11 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v1
-
-      - name: Configure environment
+        
+      - name: Prepare build dependency
         shell: bash
         run: |
-          if [[ ${{ matrix.target }} == x86_64-unknown-linux-musl ]] || [[ ${{ matrix.target }} == x86_64-unknown-linux-gnu ]]
+          if [[ ${{ matrix.target }} == x86_64-unknown-linux-gnu ]]
           then apt install libxcb-shape0-dev
           fi
 
@@ -63,21 +58,11 @@ jobs:
       - name: Prepare assets
         shell: bash
         run: |
-          mv target/${{ matrix.target }}/release/${{ matrix.bin }} .
-          if [[ ${{ matrix.target }} != x86_64-apple-darwin ]]
-          then strip ${{ matrix.bin }}
-          fi
+          mv target/${{ matrix.target }}/release/${{ matrix.bin }} .          
+          tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }} LICENSE.txt
           
-          tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }}
-          
-      - name: Declare some variables # https://stackoverflow.com/a/61699863
-        id: vars
-        shell: bash
-        run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Pre-Release
+      - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ matrix.target }}.tar
           tag_name: 1.0.0
-          prerelease: true
