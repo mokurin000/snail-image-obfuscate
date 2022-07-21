@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           mv target/${{ matrix.target }}/release/${{ matrix.bin }} .          
-          tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }} LICENSE
+          tar -cvf ${{ matrix.target }}.tar ${{ matrix.bin }} LICENSE.txt
           
       - name: Release
         uses: softprops/action-gh-release@v1
